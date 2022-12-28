@@ -7,7 +7,13 @@
       focus:outline-none dark:focus:ring-blue-800">
       +
   </a>
+
+  
+  <UserEmpty v-show="showMessageEmpty"/>
+  <PreloaderSpinner v-if="loading" />
+
   <table 
+    v-show="!showMessageEmpty"
     class="mt-7 sm:rounded-lg w-5/6 text-sm text-left 
           text-gray-500 dark:text-gray-400 shadow-2xl 
           bg-gray-900">
@@ -30,22 +36,22 @@
               </th>
           </tr>
       </thead>
-      <tbody>                
+      <tbody v-for="user in users" :key="user.id">                
         <tr class="hover:bg-gray-700">
           <td class="py-4 px-6">
-            opa
+            {{user.id}}
           </td>
           <td class="py-4 px-6">
-            opa
+            {{user.name}}
           </td>
           <td class="py-4 px-6">
-            opa
+            {{user.cellphone}}
           </td>
           <td class="py-4 px-6">
-            opa
+            {{user.phone}}
           </td>
           <td class="py-4 px-6">
-            opa
+            {{user.cellphone}}
           </td>
         </tr>
       </tbody>
@@ -54,7 +60,50 @@
 
 <script>
 
+import UserEmpty from '@/components/UserEmpty.vue'
+import PreloaderSpinner from '@/components/PreloaderSpinner.vue'
+import UserService from '@/Services/users.services';
+import swal from 'sweetalert';
+import { onMounted, ref } from 'vue';
+
 export default {
   name: 'IndexView',
+  components: {
+    UserEmpty,
+    PreloaderSpinner
+  },
+
+  setup(){
+
+    const users = ref([])
+    const showMessageEmpty = ref(false);
+    const loading = ref(false);
+
+    onMounted(() => {
+      loading.value = true
+      
+      UserService.getAll()
+              .then((response) => {
+                users.value = response.data.data
+                if (users.value.length == 0) showMessageEmpty.value = true
+              })
+              .catch((errror) => {
+                swal(
+                    "Error!", 
+                    `${errror.message}`, 
+                    "error"
+                );
+              })
+              .finally(() => {
+                loading.value = false
+              })
+    });
+
+    return {
+      users,
+      showMessageEmpty,
+      loading
+    }
+  }
 }
 </script>
