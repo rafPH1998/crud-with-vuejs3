@@ -6,4 +6,9 @@ export default class UserService
     {
         return axios.get('/users')
     }
+
+    static async storeClient(params)
+    {
+        return axios.post('/users', params)
+    }
 }
