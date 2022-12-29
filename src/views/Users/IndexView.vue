@@ -54,6 +54,18 @@
           <td class="py-4 px-6">
             {{user.cellphone}}
           </td>
+          <td>
+            <router-link 
+              class="text-blue-500" 
+              :to="{name: 'users.edit', params: {id: user.id}}">editar
+            </router-link>
+          </td>
+          <td>
+            <router-link 
+              class="text-red-500" 
+              :to="{name: 'users.edit', params: {id: user.id}}">deletar
+            </router-link>
+          </td>
         </tr>
       </tbody>
   </table>
@@ -74,13 +86,14 @@ export default {
     PreloaderSpinner
   },
 
-  setup(){
 
+  setup(){
     const users = ref([])
     const showMessageEmpty = ref(false);
     const loading = ref(false);
 
     onMounted(() => {
+
       loading.value = true
       
       UserService.getAll()
@@ -100,10 +113,12 @@ export default {
               })
     });
 
+
     return {
       users,
       showMessageEmpty,
-      loading
+      loading,
+      name,
     }
   }
 }
