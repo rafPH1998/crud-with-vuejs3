@@ -12,7 +12,6 @@ export default class UserService
         return axios.post('users/', params)
     }
 
-    
     static async getClient(id)
     {
         return axios.get(`users/${id}`)
@@ -22,4 +21,11 @@ export default class UserService
     {
         return axios.put(`users/${id}`, params)
     }
+
+    static async deleteClient(id)
+    {
+        return axios.delete(`users/${id}`)
+    }
+
+    
 }

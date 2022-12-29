@@ -10,6 +10,14 @@
       +
   </router-link>
 
+  <div
+      v-show="messageSuccess"
+      class="mt-5 w-5/6 p-4 mb-4 text-sm text-green-700 
+      bg-green-100 dark:bg-green-200 
+      dark:text-green-800" role="alert">
+      <span class="font-medium">Sucesso!</span> Cliente deletado com sucesso!
+  </div>
+
   <UserEmpty v-show="showMessageEmpty"/>
   <PreloaderSpinner v-if="loading" />
 
@@ -61,10 +69,11 @@
             </router-link>
           </td>
           <td>
-            <router-link 
-              class="text-red-500" 
-              :to="{name: 'users.edit', params: {id: user.id}}">deletar
-            </router-link>
+            <a
+              href="#"
+              @click.prevent="deleteClient(user.id)"
+              class="text-red-500">deletar
+            </a>
           </td>
         </tr>
       </tbody>
@@ -90,6 +99,7 @@ export default {
   setup(){
     const users = ref([])
     const showMessageEmpty = ref(false);
+    const messageSuccess = ref(false);
     const loading = ref(false);
 
     onMounted(() => {
@@ -113,12 +123,26 @@ export default {
               })
     });
 
+    const deleteClient = (id) => {
+      UserService.deleteClient (id)
+                .then((response) => {
+                    users.value.splice(users.value.indexOf(users), 1)
+                    if (response.status == 204) {
+                      messageSuccess.value = true
+
+                      setTimeout(() => {
+                          messageSuccess.value = false
+                      }, 4000);
+                    } 
+                })
+    }
 
     return {
       users,
       showMessageEmpty,
+      messageSuccess,
       loading,
-      name,
+      deleteClient
     }
   }
 }
