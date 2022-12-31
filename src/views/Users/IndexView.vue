@@ -10,6 +10,17 @@
       +
   </router-link>
 
+  <FilterSearch>
+    <input type="text" v-model="searchText"
+                class="bg-gray-50 border border-gray-300 
+                text-gray-900 text-sm rounded-l-lg focus:ring-blue-500 
+                focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 
+                dark:border-gray-600 dark:placeholder-gray-400 dark:text-white 
+                dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                placeholder="Procure um cliente"
+        >
+  </FilterSearch>
+
   <div
       v-show="messageSuccess"
       class="mt-5 w-5/6 p-4 mb-4 text-sm text-green-700 
@@ -21,7 +32,7 @@
   <UserEmpty v-show="showMessageEmpty"/>
   <PreloaderSpinner v-if="loading" />
 
-  <table 
+  <table
     v-show="!showMessageEmpty"
     class="mt-7 sm:rounded-lg w-5/6 text-sm text-left 
           text-gray-500 dark:text-gray-400 shadow-2xl 
@@ -45,7 +56,7 @@
               </th>
           </tr>
       </thead>
-      <tbody v-for="user in users" :key="user.id">                
+      <tbody v-for="user in filteredItems" :key="user.id">                
         <tr class="hover:bg-gray-700">
           <td class="py-4 px-6">
             {{user.id}}
@@ -54,7 +65,7 @@
             {{user.name}}
           </td>
           <td class="py-4 px-6">
-            {{user.cellphone}}
+            {{user.email}}
           </td>
           <td class="py-4 px-6">
             {{user.phone}}
@@ -84,19 +95,29 @@
 
 import UserEmpty from '@/components/UserEmpty.vue'
 import PreloaderSpinner from '@/components/PreloaderSpinner.vue'
+import FilterSearch from '@/components/FilterSearch.vue'
 import UserService from '@/Services/users.services';
 import swal from 'sweetalert';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, computed } from 'vue';
 
 export default {
   name: 'IndexView',
   components: {
     UserEmpty,
-    PreloaderSpinner
+    PreloaderSpinner,
+    FilterSearch
   },
 
-
   setup(){
+
+    const searchText = ref('')
+
+    const filteredItems = computed(() => {
+      return users.value.filter(item => {
+        return item.name.toLowerCase().includes(searchText.value.toLowerCase())
+      })
+    })
+
     const users = ref([])
     const showMessageEmpty = ref(false);
     const messageSuccess = ref(false);
@@ -142,7 +163,9 @@ export default {
       showMessageEmpty,
       messageSuccess,
       loading,
-      deleteClient
+      deleteClient,
+      searchText,
+      filteredItems
     }
   }
 }
