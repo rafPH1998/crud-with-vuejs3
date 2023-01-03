@@ -29,12 +29,15 @@
       <span class="font-medium">Sucesso!</span> Cliente deletado com sucesso!
   </div>
 
-  <UserEmpty v-show="showMessageEmpty"/>
+  <UserEmpty v-show="showMessageEmpty">
+    Nenhum registro cadastrado em nosso sistema!
+  </UserEmpty>
+
   <PreloaderSpinner v-if="loading" />
 
   <table
     v-show="!showMessageEmpty"
-    class="mt-7 sm:rounded-lg w-5/6 text-sm text-left 
+    class="sm:rounded-lg w-5/6 text-sm text-left 
           text-gray-500 dark:text-gray-400 shadow-2xl 
           bg-gray-900">
       <thead class="text-xs text-white uppercase dark:text-gray-400">
@@ -56,7 +59,7 @@
               </th>
           </tr>
       </thead>
-      <tbody v-for="user in filteredItems" :key="user.id">                
+      <tbody v-for="user in filteredItems" :key="user.id">            
         <tr class="hover:bg-gray-700">
           <td class="py-4 px-6">
             {{user.id}}
@@ -75,7 +78,13 @@
           </td>
           <td>
             <router-link 
-              class="text-blue-500" 
+              class="text-yellow-500" 
+              :to="{name: 'users.address', params: {id: user.id}}">ver endereços cadastrados ({{ user.address.length }})
+            </router-link>
+          </td>
+          <td>
+            <router-link 
+              class="text-blue-500"
               :to="{name: 'users.edit', params: {id: user.id}}">editar
             </router-link>
           </td>
@@ -129,7 +138,9 @@ export default {
       
       UserService.getAll()
               .then((response) => {
+                console.log(response.data.data)
                 users.value = response.data.data
+                
                 if (users.value.length == 0) showMessageEmpty.value = true
               })
               .catch((errror) => {

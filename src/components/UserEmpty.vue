@@ -1,7 +1,7 @@
 <template>
     <div class="w-full shadow-2xl sm:rounded-lg mt-7 bg-gray-900">
         <p class="px-8 py-8 text-white">
-            Nenhum registro cadastrado em nosso sistema!
+           <slot></slot>
         </p>
     </div>   
 </template>

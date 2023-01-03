@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from 'vue-router'
 import IndexView from '@/views/Users/IndexView.vue'
 import CreateView from '@/views/Users/CreateView.vue'
 import EditView from '@/views/Users/EditView.vue'
+import AddressView from '@/views/Users/AddressView.vue'
 
 const routes = [
   {
@@ -18,6 +19,12 @@ const routes = [
     path: '/users/:id',
     name: 'users.edit',
     component: EditView,
+    props: true
+  },
+  {
+    path: '/users/address/:id',
+    name: 'users.address',
+    component: AddressView,
     props: true
   },
 ]  
