@@ -21,17 +21,26 @@ export default class UserService
     {
         return axios.put(`users/${id}`, params)
     }
-
+    
     static async getAddress(id)
     {
         return axios.get(`users/address/${id}/details`)
     }
 
- 
+    static async storeAddreesToClient(id, params)
+    {
+        return axios.post(`users/address/${id}`, params)
+    }
+
 
     static async deleteClient(id)
     {
         return axios.delete(`users/${id}`)
+    }
+
+    static async deleteAddressToClient(id)
+    {
+        return axios.delete(`users/address/${id}/destroy`)
     }
 
     

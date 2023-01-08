@@ -21,13 +21,9 @@
         >
   </FilterSearch>
 
-  <div
-      v-show="messageSuccess"
-      class="mt-5 w-5/6 p-4 mb-4 text-sm text-green-700 
-      bg-green-100 dark:bg-green-200 
-      dark:text-green-800" role="alert">
-      <span class="font-medium">Sucesso!</span> Cliente deletado com sucesso!
-  </div>
+  <alert-success v-show="messageSuccess">
+    Cliente deletado com sucesso!
+  </alert-success>
 
   <UserEmpty v-show="showMessageEmpty">
     Nenhum registro cadastrado em nosso sistema!
@@ -42,21 +38,21 @@
           bg-gray-900">
       <thead class="text-xs text-white uppercase dark:text-gray-400">
           <tr>
-              <th scope="col" class="py-3 px-6">
-                Identificação
-              </th>
-              <th scope="col" class="py-3 px-6">
-                Nome
-              </th>
-              <th scope="col" class="py-3 px-6">
-                E-mail
-              </th>
-              <th scope="col" class="py-3 px-6">
-                Telefone fixo (opcional)
-              </th>
-              <th scope="col" class="py-3 px-6">
-                Telefone celular
-              </th>
+            <th scope="col" class="py-3 px-6">
+              Identificação
+            </th>
+            <th scope="col" class="py-3 px-6">
+              Nome
+            </th>
+            <th scope="col" class="py-3 px-6">
+              E-mail
+            </th>
+            <th scope="col" class="py-3 px-6">
+              Telefone fixo (opcional)
+            </th>
+            <th scope="col" class="py-3 px-6">
+              Telefone celular
+            </th>
           </tr>
       </thead>
       <tbody v-for="user in filteredItems" :key="user.id">            
@@ -78,6 +74,12 @@
           </td>
           <td>
             <router-link 
+              class="text-green-500" 
+              :to="{name: 'users.create', params: {id: user.id}}">+ endereço (adicionar)
+            </router-link>
+          </td>
+          <td>
+            <router-link
               class="text-yellow-500" 
               :to="{name: 'users.address', params: {id: user.id}}">ver endereços cadastrados ({{ user.address.length }})
             </router-link>
@@ -105,6 +107,7 @@
 import UserEmpty from '@/components/UserEmpty.vue'
 import PreloaderSpinner from '@/components/PreloaderSpinner.vue'
 import FilterSearch from '@/components/FilterSearch.vue'
+import AlertSuccess from '@/components/AlertSuccess.vue'
 import UserService from '@/Services/users.services';
 import swal from 'sweetalert';
 import { onMounted, ref, computed } from 'vue';
@@ -114,6 +117,7 @@ export default {
   components: {
     UserEmpty,
     PreloaderSpinner,
+    AlertSuccess,
     FilterSearch
   },
 
